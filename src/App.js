@@ -5,12 +5,22 @@ import './App.css';
 
 function App() {
   const [users, setUsers] = useState();
+  const [posts, setPosts] = useState();
+
 
   useEffect(() => {
     axios.get('https://jsonplaceholder.typicode.com/users')
     .then(response => {
       const userData = response.data;
       setUsers(userData);
+    })
+  }, [])
+
+  useEffect(() => {
+    axios.get('https://jsonplaceholder.typicode.com/posts')
+    .then(response => {
+      const postResponseData = response.data;
+      setPosts(postResponseData);
     })
   }, [])
 
@@ -23,6 +33,12 @@ function App() {
         const userDataString = `id - ${id} | username - ${username} | name - ${name} | email - ${email} | city - ${city}`
         return <h6 key={id}>{userDataString}</h6>
       })} 
+     <h1>User Posts</h1>
+     {!posts && 'loading'}
+     {posts && posts.map(post => {
+        const { id, body } = post;
+        return <h6 key={id}>{`User ${id} said:  ${body}`}</h6>
+     })}
     </div>
   );
 }
